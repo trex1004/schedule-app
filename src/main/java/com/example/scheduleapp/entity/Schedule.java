@@ -10,11 +10,14 @@ import lombok.NoArgsConstructor;
 @Table(name = "schedules")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Schedule extends BaseEntity{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @Column(nullable = false, length = 30)
     private String title;
+
     @Column(nullable = false, length = 200)
     private String contents;
 
@@ -23,6 +26,7 @@ public class Schedule extends BaseEntity{
 
     @Column(nullable = false, length = 10)
     private String password;
+
     public Schedule(String title, String contents, String userName, String password) {
         this.title = title;
         this.contents = contents;
