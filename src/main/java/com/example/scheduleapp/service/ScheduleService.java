@@ -2,14 +2,13 @@ package com.example.scheduleapp.service;
 
 import com.example.scheduleapp.dto.CreateSchedule;
 import com.example.scheduleapp.dto.ResponseSchedule;
+import com.example.scheduleapp.dto.UpdateSchedule;
 import com.example.scheduleapp.entity.Schedule;
 import com.example.scheduleapp.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,7 +26,7 @@ public class ScheduleService {
         );
         Schedule createdSchedule = scheduleRepository.save(schedule);
 
-        ResponseSchedule responseSchedule = new ResponseSchedule(
+        return new ResponseSchedule(
                 createdSchedule.getId(),
                 createdSchedule.getTitle(),
                 createdSchedule.getContents(),
@@ -35,7 +34,6 @@ public class ScheduleService {
                 createdSchedule.getCreatedAt(),
                 createdSchedule.getModifiedAt()
         );
-        return responseSchedule;
 
     }
 
@@ -64,6 +62,26 @@ public class ScheduleService {
                 schedule.getCreatedAt(),
                 schedule.getModifiedAt()
         );
+    }
+
+    @Transactional
+    public ResponseSchedule updateSchedule(Long id, UpdateSchedule request) {
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException("없는 게시물"));
+        if (!schedule.getPassword().equals(request.getPassword())) {
+            throw new IllegalArgumentException("비밀번호 불일치");
+        }
+        schedule.update(request.getTitle(), request.getUserName());
+
+        return new ResponseSchedule(
+                schedule.getId(),
+                schedule.getTitle(),
+                schedule.getContents(),
+                schedule.getUserName(),
+                schedule.getCreatedAt(),
+                schedule.getModifiedAt()
+        );
+
     }
 
 }
