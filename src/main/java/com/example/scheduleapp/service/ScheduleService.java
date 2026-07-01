@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class ScheduleService {
                 createSchedule.getContents(),
                 createSchedule.getUserName(),
                 createSchedule.getPassword()
-                );
+        );
         Schedule createdSchedule = scheduleRepository.save(schedule);
 
         ResponseSchedule responseSchedule = new ResponseSchedule(
@@ -35,6 +37,33 @@ public class ScheduleService {
         );
         return responseSchedule;
 
+    }
+
+    @Transactional(readOnly = true)
+    public List<ResponseSchedule> findAllSchedule() {
+        List<Schedule> scheduleList = scheduleRepository.findAll();
+        return scheduleList.stream().map(schedule -> new ResponseSchedule(
+                schedule.getId(),
+                schedule.getTitle(),
+                schedule.getContents(),
+                schedule.getUserName(),
+                schedule.getCreatedAt(),
+                schedule.getModifiedAt()
+        )).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseSchedule findOneSchedule(Long id) {
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException("없는 게시물"));
+        return new ResponseSchedule(
+                schedule.getId(),
+                schedule.getTitle(),
+                schedule.getContents(),
+                schedule.getUserName(),
+                schedule.getCreatedAt(),
+                schedule.getModifiedAt()
+        );
     }
 
 }

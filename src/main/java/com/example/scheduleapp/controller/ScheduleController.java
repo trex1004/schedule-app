@@ -6,10 +6,9 @@ import com.example.scheduleapp.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/schedules")
@@ -25,6 +24,17 @@ public class ScheduleController {
         return ResponseEntity.
                 status(HttpStatus.CREATED).
                 body(scheduleService.create(createSchedule));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ResponseSchedule>> findAllSchedule() {
+        List<ResponseSchedule> scheduleList = scheduleService.findAllSchedule();
+        return ResponseEntity.ok(scheduleList);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseSchedule> findOneSchedule(@PathVariable Long id) {
+        return ResponseEntity.ok(scheduleService.findOneSchedule(id));
     }
 
 
