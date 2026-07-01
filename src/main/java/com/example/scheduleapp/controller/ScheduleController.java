@@ -1,6 +1,7 @@
 package com.example.scheduleapp.controller;
 
 import com.example.scheduleapp.dto.CreateSchedule;
+import com.example.scheduleapp.dto.DeleteSchedule;
 import com.example.scheduleapp.dto.ResponseSchedule;
 import com.example.scheduleapp.dto.UpdateSchedule;
 import com.example.scheduleapp.service.ScheduleService;
@@ -40,6 +41,13 @@ public class ScheduleController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseSchedule> update(@PathVariable Long id, @RequestBody UpdateSchedule request) {
-        return ResponseEntity.ok(scheduleService.updateSchedule(id,request));
+        return ResponseEntity.ok(scheduleService.updateSchedule(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id, @RequestBody DeleteSchedule request) {
+        scheduleService.delete(id, request);
+        return ResponseEntity.noContent().build();
+
     }
 }
